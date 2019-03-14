@@ -24,6 +24,43 @@ public class EmployeTest {
 
     @Test
     public void testGetNbAnneeAncienneteAfter(){
+    //Given
+    Employe employe = new Employe();
+    LocalDate dateEmbauche = LocalDate.now().plusYears(1);
+    employe.setDateEmbauche(dateEmbauche);
 
+    //when
+    Integer nbAnnee = employe.getNombreAnneeAnciennete();
+
+    //then
+    Assertions.assertThat(nbAnnee).isEqualTo(0);
+    }
+
+    @Test
+    public void testGetNbAnneeAncienneteBefore(){
+        //Given
+        Employe employe = new Employe();
+        LocalDate dateEmbauche = LocalDate.now().minusYears(1);
+        employe.setDateEmbauche(dateEmbauche);
+
+        //when
+        Integer nbAnnee = employe.getNombreAnneeAnciennete();
+
+        //then
+        Assertions.assertThat(nbAnnee).isEqualTo(1);
+    }
+
+    @Test
+    public void testGetNbAnneeAncienneteNull(){
+        //Given
+        Employe employe = new Employe();
+        LocalDate dateEmbauche = LocalDate.now().minusYears(1);
+        employe.setDateEmbauche(null);
+
+        //when
+        Integer nbAnnee = employe.getNombreAnneeAnciennete();
+
+        //then
+        Assertions.assertThat(nbAnnee).isEqualTo(0);
     }
 }
