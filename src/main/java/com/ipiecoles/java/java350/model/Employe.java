@@ -121,7 +121,15 @@ public class Employe {
     }
 
     //Augmenter salaire
-    public void augmenterSalaire(double pourcentage){}
+    public void augmenterSalaire(double pourcentage) throws NullPointerException {
+        if(pourcentage > 0 ) {
+            try {
+                this.salaire += this.salaire * pourcentage;
+            } catch (NullPointerException e){
+                e.getMessage();
+            }
+        }
+    }
 
     public Long getId() {
         return id;

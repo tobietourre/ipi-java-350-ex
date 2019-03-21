@@ -85,4 +85,35 @@ public class EmployeTest {
 
     }
 
+    @ParameterizedTest
+    @CsvSource({
+            "1521.22, 0.5, 2281.83",
+            "1521.22, 0, 1521.22",
+            "1521.22, -0.5, 1521.22",
+            "1521.22, 1.5, 3803.05",
+    })
+    public void testAugmenterSalaire(Double salaire, Double augmentation, Double salaireAugemnte){
+        //Given
+        Employe employe = new Employe("Doe", "John", "T00001", LocalDate.now(), salaire, 1, 1.0);
+
+        //When
+        employe.augmenterSalaire(augmentation);
+
+        //Then
+        org.assertj.core.api.Assertions.assertThat(employe.getSalaire()).isEqualTo(salaireAugemnte);
+    }
+
+    @Test
+    public void testAugmenterSalaireNull(){
+        //Given
+        Employe employe = new Employe("Doe", "John", "T00001", LocalDate.now(), Entreprise.SALAIRE_BASE, 1, 1.0);
+        Double augmentation = null;
+
+        //When
+        Assertions.assertThrows(NullPointerException.class, () -> employe.augmenterSalaire(augmentation));
+
+        //Then
+        org.assertj.core.api.Assertions.assertThat(employe.getSalaire()).isEqualTo(Entreprise.SALAIRE_BASE);
+    }
+
 }
