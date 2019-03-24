@@ -85,6 +85,7 @@ public class Employe {
             case FRIDAY: if(d.isLeapYear()) var =  var + 1; break;
             case SATURDAY:
             case SUNDAY: var = var + 1; break;
+            default: break;
         }
 
         //Calcul du nombre de jours fériés tombant sur des jours ouvrés
