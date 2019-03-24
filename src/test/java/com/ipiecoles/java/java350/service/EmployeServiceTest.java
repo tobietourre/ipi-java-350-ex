@@ -167,6 +167,7 @@ public class EmployeServiceTest {
         when(employeRepository.findByMatricule(matricule)).thenReturn(employe);
         when(employeRepository.avgPerformanceWhereMatriculeStartsWith("C")).thenReturn(null);
         Long objectifCa = 100000l;
+
         //When
         employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
         performance = employe.getPerformance();
@@ -174,4 +175,70 @@ public class EmployeServiceTest {
         //Then
         Assertions.assertEquals(expectedPerformance, performance);
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "'C001', 79999, 4, 1",
+            "'C001', 79999, 0, 1",
+            "'C001', 80000, 4, 2",
+            "'C001', 90000, 2, 1",
+            "'C001', 94999, 4, 2 ",
+            "'C001', 95000, 2, 2",
+            "'C001', 100000, 0, 1",
+            "'C001', 104999, 2, 2",
+            "'C001', 105000, 1, 2",
+            "'C001', 105000, -1, 1",
+            "'C001', 119999, 3, 4",
+            "'C001', 120000, 3, 7",
+            "'C001', 120000, -4, 1",
+    })
+    public void testCalculPerformanceCommercialAboveAverage(String matricule, Long caTraite, Integer performance, Integer expectedPerformance) throws EmployeException{
+        //Given
+        Employe employe = new Employe();
+        employe.setPerformance(performance);
+        when(employeRepository.findByMatricule(matricule)).thenReturn(employe);
+        when(employeRepository.avgPerformanceWhereMatriculeStartsWith("C")).thenReturn((double) expectedPerformance - 1);
+        Long objectifCa = 100000l;
+        expectedPerformance = expectedPerformance + 1;
+
+        //When
+        employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+        performance = employe.getPerformance();
+
+        //Then
+        Assertions.assertEquals(expectedPerformance, performance);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "'C001', 79999, 4, 1",
+            "'C001', 79999, 0, 1",
+            "'C001', 80000, 4, 2",
+            "'C001', 90000, 2, 1",
+            "'C001', 94999, 4, 2 ",
+            "'C001', 95000, 2, 2",
+            "'C001', 100000, 0, 1",
+            "'C001', 104999, 2, 2",
+            "'C001', 105000, 1, 2",
+            "'C001', 105000, -1, 1",
+            "'C001', 119999, 3, 4",
+            "'C001', 120000, 3, 7",
+            "'C001', 120000, -4, 1",
+    })
+    public void testCalculPerformanceCommercialBelowAverage(String matricule, Long caTraite, Integer performance, Integer expectedPerformance) throws EmployeException{
+        //Given
+        Employe employe = new Employe();
+        employe.setPerformance(performance);
+        when(employeRepository.findByMatricule(matricule)).thenReturn(employe);
+        when(employeRepository.avgPerformanceWhereMatriculeStartsWith("C")).thenReturn((double) expectedPerformance + 1);
+        Long objectifCa = 100000l;
+
+        //When
+        employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+        performance = employe.getPerformance();
+
+        //Then
+        Assertions.assertEquals(expectedPerformance, performance);
+    }
+
 }

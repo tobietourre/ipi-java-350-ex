@@ -75,15 +75,22 @@ public class Employe {
     }
 
     public Integer getNbRtt(LocalDate d){
+        //Nombre de jours dans l'année
         int i1 = d.isLeapYear() ? 366 : 365;
+
+        //Calcul du nombre de jours de repos hebdomadaires dans l'année
         int var = 104;
         switch (LocalDate.of(d.getYear(),1,1).getDayOfWeek()){
-            case THURSDAY: if(d.isLeapYear()) var =  var + 1; break;
+            case THURSDAY:
             case FRIDAY: if(d.isLeapYear()) var =  var + 1; break;
-            case SATURDAY: var = var + 1; break;
+            case SATURDAY:
             case SUNDAY: var = var + 1; break;
         }
+
+        //Calcul du nombre de jours fériés tombant sur des jours ouvrés
         int monInt = (int) Entreprise.joursFeries(d).stream().filter(localDate -> localDate.getDayOfWeek().getValue() <= DayOfWeek.FRIDAY.getValue()).count();
+
+        
         return (int) Math.ceil((i1 - Entreprise.NB_JOURS_MAX_FORFAIT - var - Entreprise.NB_CONGES_BASE - monInt) * tempsPartiel);
     }
 
