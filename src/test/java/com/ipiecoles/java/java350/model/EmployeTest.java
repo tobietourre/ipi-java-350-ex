@@ -1,5 +1,7 @@
 package com.ipiecoles.java.java350.model;
 
+import com.ipiecoles.java.java350.exception.EmployeException;
+import cucumber.api.java.it.Ma;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -83,6 +85,59 @@ public class EmployeTest {
         //Then
         Assertions.assertEquals(primeAnnuelle, prime);
 
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1521.22, 0.5, 2281.83",
+            "1521.22, 0, 1521.22",
+            "1521.22, -0.5, 1521.22",
+            "1521.22, 1.5, 3803.05",
+    })
+    public void testAugmenterSalaire(Double salaire, Double augmentation, Double salaireAugemnte) {
+        //Given
+        Employe employe = new Employe("Doe", "John", "T00001", LocalDate.now(), salaire, 1, 1.0);
+
+        //When
+        employe.augmenterSalaire(augmentation);
+
+        //Then
+        org.assertj.core.api.Assertions.assertThat(employe.getSalaire()).isEqualTo(salaireAugemnte);
+    }
+
+    @Test
+    public void testAugmenterSalaireNull(){
+        //Given
+        Employe employe = new Employe("Doe", "John", "T00001", LocalDate.now(), Entreprise.SALAIRE_BASE, 1, 1.0);
+        Double augmentation = null;
+
+        //When
+        Assertions.assertThrows(NullPointerException.class, () -> employe.augmenterSalaire(augmentation));
+
+        //Then
+        org.assertj.core.api.Assertions.assertThat(employe.getSalaire()).isEqualTo(Entreprise.SALAIRE_BASE);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "2016, 366, 105, 8, 1.0",
+            "2017, 365, 105, 9, 1.0",
+            "2018, 365, 104, 9, 1.0",
+            "2019, 365, 104, 10, 1.0",
+            "2020, 366, 104, 9, 1.0"
+    })
+    public void testGetNbRtt(Integer annee, Integer nbJours, Integer nbJoursReposHebdo, Integer nbJoursFeriesOuvres, Double tempsPartiel){
+        //Given
+        LocalDate date = LocalDate.now().minusYears((long) 2019 - annee);
+        Employe e = new Employe();
+        e.setTempsPartiel(tempsPartiel);
+        Integer result = (int) Math.ceil((nbJours - Entreprise.NB_JOURS_MAX_FORFAIT - nbJoursReposHebdo - Entreprise.NB_CONGES_BASE - nbJoursFeriesOuvres) * tempsPartiel);
+
+        //When
+        Integer nbRtt = e.getNbRtt(date);
+
+        //Then
+        Assertions.assertEquals(result, nbRtt);
     }
 
 }

@@ -36,7 +36,7 @@ public class EmployeService {
      * @throws EmployeException Si on arrive au bout des matricules possibles
      * @throws EntityExistsException Si le matricule correspond à un employé existant
      */
-    public void embaucheEmploye(String nom, String prenom, Poste poste, NiveauEtude niveauEtude, Double tempsPartiel) throws EmployeException, EntityExistsException {
+    public void embaucheEmploye(String nom, String prenom, Poste poste, NiveauEtude niveauEtude, Double tempsPartiel) throws EmployeException {
         logger.debug("Coucou");
         logger.info("Embauche de l'employé {} {} diplômé de {} en tant que {} avec un taux d'activité de {} ", prenom, nom, niveauEtude.name(), poste.name(), tempsPartiel);
 
@@ -60,7 +60,7 @@ public class EmployeService {
 
         //On vérifie l'existence d'un employé avec ce matricule
         if(employeRepository.findByMatricule(matricule) != null){
-            logger.error("L'employé de matricule " + matricule + " existe déjà en BDD");
+            logger.error("L'employé de matricule {} existe déjà en BDD", matricule);
             throw new EntityExistsException("L'employé de matricule " + matricule + " existe déjà en BDD");
         }
 
@@ -120,16 +120,16 @@ public class EmployeService {
             performance = Math.max(Entreprise.PERFORMANCE_BASE, employe.getPerformance() - 2);
         }
         //Cas 3
-        else if(caTraite >= objectifCa*0.95 && caTraite <= objectifCa*1.05){
+        else if(caTraite >= objectifCa*0.95 && caTraite < objectifCa*1.05){
             performance = Math.max(Entreprise.PERFORMANCE_BASE, employe.getPerformance());
         }
         //Cas 4
-        else if(caTraite <= objectifCa*1.2 && caTraite > objectifCa*1.05){
-            performance = employe.getPerformance() + 1;
+        else if(caTraite >= objectifCa*1.05 &&caTraite < objectifCa*1.2 ){
+            performance = Math.max(Entreprise.PERFORMANCE_BASE,employe.getPerformance() + 1);
         }
         //Cas 5
-        else if(caTraite > objectifCa*1.2){
-            performance = employe.getPerformance() + 4;
+        else if(caTraite >= objectifCa*1.2){
+            performance = Math.max(Entreprise.PERFORMANCE_BASE, employe.getPerformance() + 4);
         }
         //Si autre cas, on reste à la performance de base.
 
