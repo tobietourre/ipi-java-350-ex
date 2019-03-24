@@ -1,5 +1,6 @@
 package com.ipiecoles.java.java350.model;
 
+import com.ipiecoles.java.java350.exception.EmployeException;
 import cucumber.api.java.it.Ma;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -93,7 +94,7 @@ public class EmployeTest {
             "1521.22, -0.5, 1521.22",
             "1521.22, 1.5, 3803.05",
     })
-    public void testAugmenterSalaire(Double salaire, Double augmentation, Double salaireAugemnte){
+    public void testAugmenterSalaire(Double salaire, Double augmentation, Double salaireAugemnte) {
         //Given
         Employe employe = new Employe("Doe", "John", "T00001", LocalDate.now(), salaire, 1, 1.0);
 

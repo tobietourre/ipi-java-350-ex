@@ -130,7 +130,7 @@ public class Employe {
     }
 
     //Augmenter salaire
-    public void augmenterSalaire(double pourcentage) throws NullPointerException {
+    public void augmenterSalaire(double pourcentage){
         if(pourcentage > 0 ) {
             try {
                 this.salaire += this.salaire * pourcentage;
