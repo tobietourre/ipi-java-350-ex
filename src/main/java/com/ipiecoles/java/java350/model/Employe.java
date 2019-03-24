@@ -90,7 +90,7 @@ public class Employe {
         //Calcul du nombre de jours fériés tombant sur des jours ouvrés
         int monInt = (int) Entreprise.joursFeries(d).stream().filter(localDate -> localDate.getDayOfWeek().getValue() <= DayOfWeek.FRIDAY.getValue()).count();
 
-        
+
         return (int) Math.ceil((i1 - Entreprise.NB_JOURS_MAX_FORFAIT - var - Entreprise.NB_CONGES_BASE - monInt) * tempsPartiel);
     }
 
