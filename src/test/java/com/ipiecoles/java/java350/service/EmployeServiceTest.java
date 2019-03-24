@@ -241,4 +241,53 @@ public class EmployeServiceTest {
         Assertions.assertEquals(expectedPerformance, performance);
     }
 
+    @Test
+    public void testCalculPerformanceCommercialMatriculeNull() throws EmployeException{
+        //Given
+        String matricule = null;
+        Long caTraite = 100000l;
+        Long objectifCa = 100000l;
+
+        //When //Then
+        EmployeException e = Assertions.assertThrows(EmployeException.class, () ->  employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa));
+        Assertions.assertEquals("Le matricule ne peut être null et doit commencer par un C !", e.getMessage());
+    }
+
+    @Test
+    public void testCalculPerformanceCommercialCaTraiteNull() throws EmployeException{
+        //Given
+        String matricule = "C001";
+        Long caTraite = null;
+        Long objectifCa = 100000l;
+
+        //When //Then
+        EmployeException e = Assertions.assertThrows(EmployeException.class, () ->  employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa));
+        Assertions.assertEquals("Le chiffre d'affaire traité ne peut être négatif ou null !", e.getMessage());
+    }
+
+    @Test
+    public void testCalculPerformanceCommercialObjectifCaNull() throws EmployeException{
+        //Given
+        String matricule = "C001";
+        Long caTraite = 100000l;
+        Long objectifCa = null;
+
+        //When // Then
+        EmployeException e = Assertions.assertThrows(EmployeException.class, () ->  employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa));
+        Assertions.assertEquals("L'objectif de chiffre d'affaire ne peut être négatif ou null !", e.getMessage());
+    }
+
+    @Test
+    public void testCalculPerformanceCommercialMatriculeInexistant() throws EmployeException{
+        //Given
+        String matricule = "C001";
+        Long caTraite = 100000l;
+        Long objectifCa = 100000l;
+        when(employeRepository.findByMatricule(matricule)).thenReturn(null);
+
+        //When //Then
+        EmployeException e = Assertions.assertThrows(EmployeException.class, () ->  employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa));
+        Assertions.assertEquals("Le matricule " + matricule + " n'existe pas !", e.getMessage());
+    }
+
 }
